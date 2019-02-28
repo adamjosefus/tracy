@@ -20,8 +20,7 @@ class Helpers
 	 */
 	public static function editorLink(string $file, int $line = null): string
 	{
-		$file = strtr($origFile = $file, Debugger::$editorMapping);
-		if ($editor = self::editorUri($origFile, $line)) {
+		if ($editor = self::editorUri($file, $line)) {
 			$file = strtr($file, '\\', '/');
 			if (preg_match('#(^[a-z]:)?/.{1,40}$#i', $file, $m) && strlen($file) > strlen($m[0])) {
 				$file = '...' . $m[0];
@@ -29,7 +28,7 @@ class Helpers
 			$file = strtr($file, '/', DIRECTORY_SEPARATOR);
 			return self::formatHtml('<a href="%" title="%">%<b>%</b>%</a>',
 				$editor,
-				$origFile . ($line ? ":$line" : ''),
+				$file . ($line ? ":$line" : ''),
 				rtrim(dirname($file), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR,
 				basename($file),
 				$line ? ":$line" : ''
@@ -47,7 +46,6 @@ class Helpers
 	{
 		if (Debugger::$editor && $file && ($action === 'create' || is_file($file))) {
 			$file = strtr($file, '/', DIRECTORY_SEPARATOR);
-			$file = strtr($file, Debugger::$editorMapping);
 			return strtr(Debugger::$editor, [
 				'%action' => $action,
 				'%file' => rawurlencode($file),

@@ -70,9 +70,6 @@ class Debugger
 	/** @deprecated  use Tracy\Dumper::$showLocation */
 	public static $showLocation;
 
-	/** @deprecated  use Tracy\Dumper::$maxLength */
-	public static $maxLen;
-
 	/********************* logging ****************d*g**/
 
 	/** @var string|null name of the directory where errors should be logged */
@@ -100,12 +97,6 @@ class Debugger
 
 	/** @var string URI pattern mask to open editor */
 	public static $editor = 'editor://%action/?file=%file&line=%line&search=%search&replace=%replace';
-
-	/** @var array replacements in path */
-	public static $editorMapping = [];
-
-	/** @var string command to open browser (use 'start ""' in Windows) */
-	public static $browser;
 
 	/** @var string custom static error template */
 	public static $errorTemplate;
@@ -329,9 +320,6 @@ class Debugger
 					header("X-Tracy-Error-Log: $file", false);
 				}
 				echo "$exception\n" . ($file ? "(stored in $file)\n" : '');
-				if ($file && self::$browser) {
-					exec(self::$browser . ' ' . escapeshellarg($file));
-				}
 			} catch (\Throwable $e) {
 				echo "$exception\nUnable to log error: {$e->getMessage()}\n";
 			}
