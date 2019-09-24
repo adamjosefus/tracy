@@ -37,7 +37,7 @@ The recommended way to is via Composer:
 composer require tracy/tracy
 ```
 
-Alternatively, you can download the whole package or [tracy.phar](https://github.com/nette/tracy/releases) file.
+Alternatively, you can download [tracy.phar](https://github.com/nette/tracy/releases) file.
 
 | Tracy     | compatible with PHP | compatible with browsers
 |-----------|---------------|----------

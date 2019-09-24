@@ -38,7 +38,18 @@ function compressCss(string $s): string
 
 $phar = new Phar('tracy.phar');
 $phar->setStub("<?php
-require 'phar://' . __FILE__ . '/tracy.php';
+require 'phar://' . __FILE__ . '/Tracy/Bar/IBarPanel.php';
+require 'phar://' . __FILE__ . '/Tracy/Bar/Bar.php';
+require 'phar://' . __FILE__ . '/Tracy/Bar/DefaultBarPanel.php';
+require 'phar://' . __FILE__ . '/Tracy/BlueScreen/BlueScreen.php';
+require 'phar://' . __FILE__ . '/Tracy/Dumper/Dumper.php';
+require 'phar://' . __FILE__ . '/Tracy/Logger/ILogger.php';
+require 'phar://' . __FILE__ . '/Tracy/Logger/FireLogger.php';
+require 'phar://' . __FILE__ . '/Tracy/Logger/Logger.php';
+require 'phar://' . __FILE__ . '/Tracy/Debugger/Debugger.php';
+require 'phar://' . __FILE__ . '/Tracy/OutputDebugger/OutputDebugger.php';
+require 'phar://' . __FILE__ . '/Tracy/Helpers.php';
+require 'phar://' . __FILE__ . '/Tracy/shortcuts.php';
 __HALT_COMPILER();
 ");
 

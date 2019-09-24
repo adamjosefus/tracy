@@ -2,7 +2,9 @@
 
 declare(strict_types=1);
 
-require __DIR__ . '/../src/tracy.php';
+if (@!include __DIR__ . '/../vendor/autoload.php') {
+	die('Install packages using `composer install`');
+}
 
 use Tracy\Debugger;
 
