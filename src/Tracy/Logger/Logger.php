@@ -42,7 +42,7 @@ class Logger implements ILogger
 		$this->directory = $directory;
 		$this->email = $email;
 		$this->blueScreen = $blueScreen;
-		$this->mailer = [$this, 'defaultMailer'];
+		$this->mailer = \Closure::fromCallable([$this, 'defaultMailer']);
 	}
 
 
@@ -175,9 +175,8 @@ class Logger implements ILogger
 	/**
 	 * Default mailer.
 	 * @param  mixed  $message
-	 * @internal
 	 */
-	public function defaultMailer($message, string $email): void
+	private function defaultMailer($message, string $email): void
 	{
 		$host = preg_replace('#[^\w.-]+#', '', $_SERVER['SERVER_NAME'] ?? php_uname('n'));
 		$parts = str_replace(

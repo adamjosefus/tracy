@@ -35,12 +35,11 @@ final class OutputDebugger
 				$this->list[] = [$file, 1, self::BOM];
 			}
 		}
-		ob_start([$this, 'handler'], 1);
+		ob_start(\Closure::fromCallable([$this, 'handler']), 1);
 	}
 
 
-	/** @internal */
-	public function handler(string $s, int $phase): ?string
+	private function handler(string $s, int $phase): ?string
 	{
 		$trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
 		if (isset($trace[0]['file'], $trace[0]['line'])) {
