@@ -51,3 +51,22 @@ test(function () { // returned value
 	$obj = new stdClass;
 	Assert::same(Dumper::dump($obj), $obj);
 });
+
+
+test(function () { // options
+	$arr = [1, 'loooooooooooooooooooooong texxxxxt', 2, 3, 4, 5, 6, 7, 8];
+	ob_start();
+	Dumper::$showLocation = false;
+	Dumper::$maxItems = 3;
+	Dumper::dump($arr, [Dumper::TRUNCATE => 10]);
+	Assert::match(<<<'XX'
+<pre class="tracy-dump"
+><span class="tracy-toggle"><span class="tracy-dump-array">array</span> (9)</span>
+<div><span class="tracy-dump-indent">   </span><span class="tracy-dump-number">0</span> => <span class="tracy-dump-number">1</span>
+<span class="tracy-dump-indent">   </span><span class="tracy-dump-number">1</span> => <span class="tracy-dump-string" title="34 characters">'looooooooo <span>…</span> g texxxxxt'</span>
+<span class="tracy-dump-indent">   </span><span class="tracy-dump-number">2</span> => <span class="tracy-dump-number">2</span>
+<span class="tracy-dump-indent">   </span>…
+</div></pre>
+XX
+, ob_get_clean());
+});
