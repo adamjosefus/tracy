@@ -121,7 +121,7 @@ final class Renderer
 	/**
 	 * @param  mixed  $value
 	 */
-	private function renderVar($value, int $depth = 0): string
+	private function renderVar($value, int $depth = 0, bool $isKey = false): string
 	{
 		switch (true) {
 			case $value === null:
@@ -137,7 +137,7 @@ final class Renderer
 				return '<span class="tracy-dump-number">' . json_encode($value) . '</span>';
 
 			case is_string($value):
-				return $this->renderString($value);
+				return $this->renderString($value, $isKey);
 
 			case is_array($value):
 			case $value->type === 'array':
@@ -157,7 +157,7 @@ final class Renderer
 
 			case $value->type === 'string':
 			case $value->type === 'bin':
-				return $this->renderString($value);
+				return $this->renderString($value, $isKey);
 
 			case $value->type === 'resource':
 				return $this->renderResource($value, $depth);
@@ -171,13 +171,17 @@ final class Renderer
 	/**
 	 * @param  string|Value  $str
 	 */
-	private function renderString($str): string
+	private function renderString($str, bool $isKey): string
 	{
-		if (is_string($str)) {
+		if ($isKey) {
+			return '<span class="tracy-dump-string">\'' . str_replace("\n", "\n ", is_string($str) ? $str : $str->value) . "'</span>";
+
+		} elseif (is_string($str)) {
 			$len = strlen(utf8_decode($str));
 			return '<span class="tracy-dump-string"'
 				. ($len > 1 ? ' title="' . $len . ' characters"' : '')
 				. ">'$str'</span>";
+
 		} else {
 			return '<span class="tracy-dump-string"'
 				. ($str->length > 1 ? ' title="' . $str->length . ' ' . ($str->type === 'string' ? 'characters' : 'bytes') . '">' : '>')
@@ -233,7 +237,8 @@ final class Renderer
 		foreach ($items as $info) {
 			[$k, $v, $ref] = $info + [2 => null];
 			$out .= $indent
-				. '<span class="tracy-dump-key">' . str_replace("\n", "\n ", $k) . '</span> => '
+				. $this->renderVar($k, $depth + 1, true)
+				. ' => '
 				. ($ref ? '<span class="tracy-dump-hash">&' . $ref . '</span> ' : '')
 				. ($tmp = $this->renderVar($v, $depth + 1))
 				. (substr($tmp, -6) === '</div>' ? '' : "\n");
