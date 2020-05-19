@@ -216,7 +216,7 @@ final class Renderer
 			$array = isset($array->id) ? new Value('ref', $array->id) : $array;
 			$this->copySnapshot($array);
 			return $span . " data-tracy-dump='"
-				. json_encode($array, JSON_HEX_APOS | JSON_HEX_AMP) . "'>"
+				. json_encode($array, JSON_HEX_APOS | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) . "'>"
 				. $out . $count . ")</span>\n";
 		}
 
@@ -350,6 +350,6 @@ final class Renderer
 
 	public static function formatSnapshotAttribute($snapshot): string
 	{
-		return "'" . json_encode($snapshot, JSON_HEX_APOS | JSON_HEX_AMP) . "'";
+		return "'" . json_encode($snapshot, JSON_HEX_APOS | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) . "'";
 	}
 }
