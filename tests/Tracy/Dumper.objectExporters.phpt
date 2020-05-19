@@ -42,6 +42,7 @@ $exporters = [
 	'stdClass' => function ($var, Value $value, Dumper\Describer $describer) {
 		$describer->addPropertyTo($value, 'x', $var->a + 2, Value::PROP_PUBLIC);
 		$value->items[] = [$describer->describeKey('key'), new Value(Value::TYPE_TEXT, 'hello')];
+		$value->items[] = [new Value(Value::TYPE_TEXT, '$x'), new Value(Value::TYPE_TEXT, 'hello')];
 	},
 ];
 Assert::match(<<<'XX'
@@ -49,6 +50,7 @@ Assert::match(<<<'XX'
 ><span class="tracy-toggle"><span class="tracy-dump-object">stdClass</span> <span class="tracy-dump-hash">#%d%</span></span>
 <div><span class="tracy-dump-indent">   </span><span class="tracy-dump-public">x</span>: <span class="tracy-dump-number">3</span>
 <span class="tracy-dump-indent">   </span><span class="tracy-dump-virtual">key</span>: <span>hello</span>
+<span class="tracy-dump-indent">   </span><span>$x</span>: <span>hello</span>
 </div></pre>
 XX
 , Dumper::toHtml($obj, [Dumper::OBJECT_EXPORTERS => $exporters]));
