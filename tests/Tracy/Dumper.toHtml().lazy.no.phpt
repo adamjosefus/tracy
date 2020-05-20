@@ -17,18 +17,18 @@ require __DIR__ . '/fixtures/DumpClass.php';
 // no lazy dump of scalars & empty array
 $options = [Dumper::LAZY => false];
 
-Assert::match('<pre class="tracy-dump"><span class="tracy-dump-null">null</span></pre>', Dumper::toHtml(null, $options));
+Assert::match('<pre class="tracy-dump--light"><span class="tracy-dump-null">null</span></pre>', Dumper::toHtml(null, $options));
 
-Assert::match('<pre class="tracy-dump"><span class="tracy-dump-bool">true</span></pre>', Dumper::toHtml(true, $options));
+Assert::match('<pre class="tracy-dump--light"><span class="tracy-dump-bool">true</span></pre>', Dumper::toHtml(true, $options));
 
-Assert::match('<pre class="tracy-dump"><span class="tracy-dump-number">0</span></pre>', Dumper::toHtml(0, $options));
+Assert::match('<pre class="tracy-dump--light"><span class="tracy-dump-number">0</span></pre>', Dumper::toHtml(0, $options));
 
-Assert::match('<pre class="tracy-dump"><span class="tracy-dump-array">array</span> (0)</pre>', Dumper::toHtml([], $options));
+Assert::match('<pre class="tracy-dump--light"><span class="tracy-dump-array">array</span> (0)</pre>', Dumper::toHtml([], $options));
 
 
 // no lazy dump of array
 Assert::match(<<<'XX'
-<pre class="tracy-dump"
+<pre class="tracy-dump--light"
 ><span class="tracy-toggle"><span class="tracy-dump-array">array</span> (11)</span>
 <div><span class="tracy-dump-indent">   </span><span class="tracy-dump-number">0</span> => <span class="tracy-dump-null">null</span>
 <span class="tracy-dump-indent">   </span><span class="tracy-dump-number">1</span> => <span class="tracy-dump-bool">true</span>
@@ -48,7 +48,7 @@ XX
 
 // no lazy dump and resource
 Assert::match(<<<'XX'
-<pre class="tracy-dump"
+<pre class="tracy-dump--light"
 ><span class="tracy-toggle tracy-collapsed"><span class="tracy-dump-resource">stream resource</span> <span class="tracy-dump-hash">@%d%</span></span>
 <div class="tracy-collapsed">%A%
 XX
@@ -57,7 +57,7 @@ XX
 
 // no lazy dump and collapse
 Assert::match(<<<'XX'
-<pre class="tracy-dump"
+<pre class="tracy-dump--light"
 ><span class="tracy-toggle tracy-collapsed"><span class="tracy-dump-object">Test</span> <span class="tracy-dump-hash">#%d%</span></span>
 <div class="tracy-collapsed"><span class="tracy-dump-indent">   </span><span class="tracy-dump-public">x</span>: <span class="tracy-toggle"><span class="tracy-dump-array">array</span> (2)</span>
 <div><span class="tracy-dump-indent">   |  </span><span class="tracy-dump-number">0</span> => <span class="tracy-dump-number">10</span>
@@ -71,7 +71,7 @@ XX
 
 // no lazy dump & location
 Assert::match(<<<'XX'
-<pre class="tracy-dump"
+<pre class="tracy-dump--light"
 ><a href="editor://open/?file=%a%&amp;line=%d%&amp;search=&amp;replace=" class="tracy-dump-location" title="in file %a% on line %d%&#10;Click to open in editor">Dumper::toHtml(new Test, $options + ['location' => <span>…</span> N_CLASS])) 📍</a
 ><span class="tracy-toggle"><span class="tracy-dump-object" title="Declared in file %a% on line %d%&#10;Ctrl-Click to open in editor" data-tracy-href="editor://open/?file=%a%&amp;line=%d%&amp;search=&amp;replace=">Test</span> <span class="tracy-dump-hash">#%d%</span></span>
 <div><span class="tracy-dump-indent">   </span><span class="tracy-dump-public">x</span>: <span class="tracy-toggle"><span class="tracy-dump-array">array</span> (2)</span>
@@ -88,7 +88,7 @@ XX
 $arr = [1, 2, 3];
 $arr[] = &$arr;
 Assert::match(<<<'XX'
-<pre class="tracy-dump"
+<pre class="tracy-dump--light"
 ><span class="tracy-toggle"><span class="tracy-dump-array">array</span> (4)</span>
 <div><span class="tracy-dump-indent">   </span><span class="tracy-dump-number">0</span> => <span class="tracy-dump-number">1</span>
 <span class="tracy-dump-indent">   </span><span class="tracy-dump-number">1</span> => <span class="tracy-dump-number">2</span>
@@ -105,7 +105,7 @@ XX
 $obj = new stdClass;
 $obj->x = $obj;
 Assert::match(<<<'XX'
-<pre class="tracy-dump"
+<pre class="tracy-dump--light"
 ><span class="tracy-toggle"><span class="tracy-dump-object">stdClass</span> <span class="tracy-dump-hash">#%d%</span></span>
 <div><span class="tracy-dump-indent">   </span><span class="tracy-dump-dynamic">x</span>: <span class="tracy-dump-object">stdClass</span> <span class="tracy-dump-hash">#%d%</span> <i>RECURSION</i>
 </div></pre>
@@ -116,7 +116,7 @@ XX
 // max depth
 $arr = [1, [2, [3, [4, [5, [6]]]]], 3];
 Assert::match(<<<'XX'
-<pre class="tracy-dump"
+<pre class="tracy-dump--light"
 ><span class="tracy-toggle"><span class="tracy-dump-array">array</span> (3)</span>
 <div><span class="tracy-dump-indent">   </span><span class="tracy-dump-number">0</span> => <span class="tracy-dump-number">1</span>
 <span class="tracy-dump-indent">   </span><span class="tracy-dump-number">1</span> => <span class="tracy-toggle"><span class="tracy-dump-array">array</span> (2)</span>
@@ -138,7 +138,7 @@ $obj->a->b->c = new stdClass;
 $obj->a->b->c->d = new stdClass;
 $obj->a->b->c->d->e = new stdClass;
 Assert::match(<<<'XX'
-<pre class="tracy-dump"
+<pre class="tracy-dump--light"
 ><span class="tracy-toggle"><span class="tracy-dump-object">stdClass</span> <span class="tracy-dump-hash">#%d%</span></span>
 <div><span class="tracy-dump-indent">   </span><span class="tracy-dump-dynamic">a</span>: <span class="tracy-toggle"><span class="tracy-dump-object">stdClass</span> <span class="tracy-dump-hash">#%d%</span></span>
 <div><span class="tracy-dump-indent">   |  </span><span class="tracy-dump-dynamic">b</span>: <span class="tracy-toggle"><span class="tracy-dump-object">stdClass</span> <span class="tracy-dump-hash">#%d%</span></span>
